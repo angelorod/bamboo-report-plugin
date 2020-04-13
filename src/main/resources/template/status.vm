@@ -1,0 +1,25 @@
+#if ($model.isMarkedUnstable())
+    #if ($model.isUnstable())
+        <div class="alert alert-danger d-flex align-center">
+            <i class="icn-danger icn-lg mx-1"></i>
+            $model.getSummary()
+        </div>
+    #else
+        <div class="alert alert-success d-flex align-center">
+            <i class="icn-success icn-lg mx-1"></i>
+            $model.getSummary()
+        </div>
+    #end
+#else
+    #if ($model.isUnstable())
+        <div class="alert alert-warning d-flex align-center">
+            <i class="icn-warning icn-lg mx-1"></i>
+            $model.getSummary()
+        </div>
+    #else
+        <div class="alert alert-success d-flex align-center">
+            <i class="icn-success icn-lg mx-1"></i>
+            $model.getSummary()
+        </div>
+    #end
+#end

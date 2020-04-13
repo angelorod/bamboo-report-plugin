@@ -1,0 +1,380 @@
+#parse("template/status.vm")
+
+<h3>Report Summary</h3>
+<table class="table table-striped w-25 mb-5">
+    <thead>
+    <tr>
+        <th>Gate</th>
+        <th>Status</th>
+        #if ($model.isHasTotal())
+            <th>Errors</th>
+        #end
+    </tr>
+    </thead>
+    <tbody>
+    #if ($model.isCheckNewEvents())
+        #if ($model.isPassedNewErrorGate())
+            <tr>
+                <td>
+                    <i class="icn-success icn-td"></i>
+                    <a href="#new-gate">New</a>
+                </td>
+                <td>Passed</td>
+                #if ($model.isHasTotal())
+                    <td>$model.getNewGateTotal()</td>
+                #end
+            </tr>
+        #else
+            <tr>
+                <td>
+                    <i class="icn-times icn-td"></i>
+                    <a href="#new-gate">New</a>
+                </td>
+                <td>Failed</td>
+                #if ($model.isHasTotal())
+                    <td>$model.getNewGateTotal()</td>
+                #end
+            </tr>
+        #end
+    #end
+
+    #if ($model.isCheckResurfacedEvents())
+        #if ($model.isPassedResurfacedErrorGate())
+            <tr>
+                <td>
+                    <i class="icn-success icn-td"></i>
+                    <a href="#resurfaced-gate">Resurfaced</a>
+                </td>
+                <td>Passed</td>
+                #if ($model.isHasTotal())
+                    <td>$model.getResurfacedGateTotal()</td>
+                #end
+            </tr>
+        #else
+            <tr>
+                <td>
+                    <i class="icn-times icn-td"></i>
+                    <a href="#resurfaced-gate">Resurfaced</a>
+                </td>
+                <td>Failed</td>
+                #if ($model.isHasTotal())
+                    <td>$model.getResurfacedGateTotal()</td>
+                #end
+            </tr>
+        #end
+    #end
+
+    #if ($model.isCheckTotalErrors())
+        #if ($model.isPassedTotalErrorGate())
+            <tr>
+                <td>
+                    <i class="icn-success icn-td"></i>
+                    <a href="#total-gate">Total</a>
+                </td>
+                <td>Passed</td>
+                #if ($model.isHasTotal())
+                    <td>$model.getTotalGateTotal()</td>
+                #end
+            </tr>
+        #else
+            <tr>
+                <td>
+                    <i class="icn-times icn-td"></i>
+                    <a href="#total-gate">Total</a>
+                </td>
+                <td>Failed</td>
+                #if ($model.isHasTotal())
+                    <td>$model.getTotalGateTotal()</td>
+                #end
+            </tr>
+        #end
+    #end
+
+    #if ($model.isCheckUniqueErrors())
+        #if ($model.isPassedUniqueErrorGate())
+            <tr>
+                <td>
+                    <i class="icn-success icn-td"></i>
+                    <a href="#unique-gate">Unique</a>
+                </td>
+                <td>Passed</td>
+                #if ($model.isHasTotal())
+                    <td>$model.getUniqueGateTotal()</td>
+                #end
+            </tr>
+        #else
+            <tr>
+                <td>
+                    <i class="icn-times icn-td"></i>
+                    <a href="#unique-gate">Unique</a>
+                </td>
+                <td>Failed</td>
+                #if ($model.isHasTotal())
+                    <td>$model.getUniqueGateTotal()</td>
+                #end
+            </tr>
+        #end
+    #end
+
+
+    #if ($model.isCheckCriticalErrors())
+        #if ($model.isPassedCriticalErrorGate())
+            <tr>
+                <td>
+                    <i class="icn-success icn-td"></i>
+                    <a href="#critical-gate">Critical</a>
+                </td>
+                <td>Passed</td>
+                #if ($model.isHasTotal())
+                    <td>$model.getCriticalGateTotal()</td>
+                #end
+            </tr>
+        #else
+            <tr>
+                <td>
+                    <i class="icn-times icn-td"></i>
+                    <a href="#critical-gate">Critical</a>
+                </td>
+                <td>Failed</td>
+                #if ($model.isHasTotal())
+                    <td>$model.getCriticalGateTotal()</td>
+                #end
+            </tr>
+        #end
+    #end
+
+    #if ($model.isCheckRegressedErrors())
+        #if ($model.isPassedRegressedEvents())
+            <tr>
+                <td>
+                    <i class="icn-success icn-td"></i>
+                    <a href="#increasing-gate">Increasing</a>
+                </td>
+                <td>Passed</td>
+                #if ($model.isHasTotal())
+                    <td>$model.getRegressionGateTotal()</td>
+                #end
+            </tr>
+        #else
+            <tr>
+                <td>
+                    <i class="icn-times icn-td"></i>
+                    <a href="#increasing-gate">Increasing</a>
+                </td>
+                <td>Failed</td>
+                #if ($model.isHasTotal())
+                    <td>$model.getRegressionGateTotal()</td>
+                #end
+            </tr>
+        #end
+    #end
+
+    </tbody>
+</table>
+
+#if ($model.isCheckNewEvents())
+    #if ($model.isPassedNewErrorGate())
+        <div class="d-flex align-center mt-4">
+            <i class="icn-success mr-1"></i>
+            <h4 id="new-gate">$model.getNewErrorSummary()</h4>
+        </div>
+        <p class="ml-2 muted">Nothing to report</p>
+    #else
+        <div class="d-flex align-center mb-2 mt-4">
+            #include("web/img/icn-danger.svg")
+            <h4 id="new-gate">$model.getNewErrorSummary()</h4>
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Event</th>
+                <th>Application(s)</th>
+                <th>Introduced by</th>
+                <th>Volume</th>
+            </tr>
+            </thead>
+            <tbody>
+            
+            #foreach($event in $model.getNewEvents())
+                <tr>
+                    <td>
+                        <a href="$event.getArcLink()" target="_blank">$event.getEventSummary()</a>
+                    </td>
+                    <td>$event.getApplications()</td>
+                    <td>$event.getIntroducedBy()</td>
+                    <td>$event.getHits()</td>
+                </tr>
+            #end
+            </tbody>
+        </table>
+    #end
+#end
+
+#if ($model.isCheckResurfacedEvents())
+    #if ($model.isPassedResurfacedErrorGate())
+        <div class="d-flex align-center mt-4">
+            <i class="icn-success mr-1"></i>
+            <h4 id="resurfaced-gate">$model.getResurfacedErrorSummary()</h4>
+        </div>
+        <p class="ml-2 muted">Nothing to report</p>
+    #else
+        <div class="d-flex align-center mb-2 mt-4">
+            #include("web/img/icn-danger.svg")
+            <h4 id="resurfaced-gate">$model.getResurfacedErrorSummary()</h4>
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Event</th>
+                <th>Application(s)</th>
+                <th>Introduced by</th>
+                <th>Volume</th>
+            </tr>
+            </thead>
+            <tbody>
+            #foreach($event in $model.getResurfacedEvents())
+                <tr>
+                    <td>
+                        <a href="$event.getArcLink()" target="_blank">$event.getEventSummary()</a>
+                    </td>
+                    <td>$event.getApplications()</td>
+                    <td>$event.getIntroducedBy()</td>
+                    <td>$event.getHits()</td>
+                </tr>
+            #end
+            </tbody>
+        </table>
+    #end
+#end
+
+#if ($model.isCheckTotalErrors() || $model.isCheckUniqueErrors())
+    #if ($model.isCheckTotalErrors())
+        #if ($model.isPassedTotalErrorGate())
+            <div class="d-flex align-center mt-4 mb-2">
+                #include("web/img/icn-success.svg")
+                <h4 id="total-gate">$model.getTotalErrorSummary()</h4>
+            </div>
+        #else
+            <div class="d-flex align-center mt-4 mb-2">
+                #include("web/img/icn-danger.svg")
+                <h4 id="total-gate">$model.getTotalErrorSummary()</h4>
+            </div>
+        #end
+    #end
+    #if ($model.isCheckUniqueErrors())
+        #if ($model.isPassedUniqueErrorGate())
+            <div class="d-flex align-center mt-4 mb-2">
+                <i class="icn-success mr-1"></i>
+                <h4 id="unique-gate">$model.getUniqueErrorSummary()</h4>
+            </div>
+        #else
+            <div class="d-flex align-center mt-4 mb-2">
+                #include("web/img/icn-danger.svg")
+                <h4 id="unique-gate">$model.getUniqueErrorSummary()</h4>
+            </div>
+        #end
+    #end
+
+    #if ($model.isHasTopErrors())
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Top Events Affecting Unique/Total Error Gates</th>
+                <th>Application(s)</th>
+                <th>Introduced by</th>
+                <th>Volume</th>
+            </tr>
+            </thead>
+            <tbody>
+            #foreach($event in $model.getTopEvents())
+                <tr>
+                    <td>
+                        <a href="$event.getArcLink()" target="_blank">$event.getEventSummary()</a>
+                    </td>
+                    <td>$event.getApplications()</td>
+                    <td>$event.getIntroducedBy()</td>
+                    <td>$event.getHits()</td>
+                </tr>
+            #end
+            </tbody>
+        </table>
+    #else
+        <p class="ml-2 muted">Nothing to report</p>
+    #end
+#end
+
+#if ($model.isCheckCriticalErrors())
+    #if ($model.isPassedCriticalErrorGate())
+        <div class="d-flex align-center mt-4">
+            <i class="icn-success mr-1"></i>
+            <h4 id="critical-gate">$model.getCriticalErrorSummary()</h4>
+        </div>
+        <p class="ml-2 muted">Nothing to report</p>
+    #else
+        <div class="d-flex align-center mb-2 mt-4">
+            #include("web/img/icn-danger.svg")
+            <h4 id="critical-gate">$model.getCriticalErrorSummary()</h4>
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Event</th>
+                <th>Application(s)</th>
+                <th>Introduced by</th>
+                <th>Volume</th>
+            </tr>
+            </thead>
+            <tbody>
+            #foreach($event in $model.getCriticalEvents())
+                <tr>
+                    <td>
+                        <a href="$event.getArcLink()" target="_blank">$event.getEventSummary()</a>
+                    </td>
+                    <td>$event.getApplications()</td>
+                    <td>$event.getIntroducedBy()</td>
+                    <td>$event.getHits()</td>
+                </tr>
+            #end
+            </tbody>
+        </table>
+    #end
+#end
+
+#if ($model.isCheckRegressedErrors())
+    #if ($model.isPassedRegressedEvents())
+        <div class="d-flex align-center mt-4">
+            <i class="icn-success mr-1"></i>
+            <h4 id="increasing-gate">$model.getRegressionSummary()</h4>
+        </div>
+        <p class="ml-2 muted">Nothing to report</p>
+    #else
+        <div class="d-flex align-center mb-2 mt-4">
+            #include("web/img/icn-danger.svg")
+            <h4 id="increasing-gate">$model.getRegressionSummary()</h4>
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Event</th>
+                <th>Application(s)</th>
+                <th>Introduced by</th>
+                <th>Volume / Rate</th>
+                <th>Type</th>
+            </tr>
+            </thead>
+            <tbody>
+            #foreach($event in $model.getRegressedEvents())
+                <tr>
+                    <td>
+                        <a href="$event.getArcLink()" target="_blank">$event.getEventSummary()</a>
+                    </td>
+                    <td>$event.getApplications()</td>
+                    <td>$event.getIntroducedBy()</td>
+                    <td>$event.getEventRate()</td>
+                    <td>$event.getType()</td>
+                </tr>
+            #end
+            </tbody>
+        </table>
+    #end
+#end

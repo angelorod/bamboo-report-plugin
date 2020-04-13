@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Overops Report</title>
+    <style>
+        #include("web/css/style.css")
+    </style>
+</head>
+
+#set($overopsLogo = "bamboo-plugin/src/main/resources/web/css/style.css")
+#set($overopsLogo = "bamboo-plugin/src/main/resources/web/img/overops-logo.svg")
+#set($dangerIcon = "bamboo-plugin/src/main/resources/web/img/icn-danger.svg")
+#set($questionIcon = "bamboo-plugin/src/main/resources/web/img/icn-question.svg")
+#set($successIcon = "bamboo-plugin/src/main/resources/web/img/icn-success.svg")
+#set($timesIcon = "bamboo-plugin/src/main/resources/web/img/icn-times.svg")
+#set($warningIcon = "bamboo-plugin/src/main/resources/web/img/icn-warning.svg")
+
+<body class="overops-quality-report container">
+    <div class="d-flex align-center mt-3">
+        <div class="mr-2">
+            <img style="height:50px;" src="$overopsLogo"/>
+        </div>
+        <h1>Quality Report</h1>
+    </div>
+
+    #if ($model.isHasException())
+        #parse("template/exception.vm")
+    #else
+        #parse("template/report.vm")
+    #end
+
+</body>
+</html>
